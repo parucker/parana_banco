@@ -23,6 +23,7 @@ jobs:
         pip install isort
         pip install black
         pip install httpx
+        pip install joblib
 
     - name: Check isort
       run: |
