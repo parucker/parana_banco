@@ -1,11 +1,13 @@
+import uuid
+from datetime import datetime
+
 import joblib
 import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
-from datetime import datetime
-import uuid
 
 app = FastAPI(title="Parana Banco Inferencia")
+
 
 class InferenceObject(BaseModel):
     feature_1: float
@@ -15,32 +17,19 @@ class InferenceObject(BaseModel):
 @app.on_event("startup")
 def load_model():
     global model
-    model = joblib.load("model/modelo.joblib") 
+    model = joblib.load("mlops/model/modelo.joblib")
+
 
 @app.post("/predict")
 def predict(inference_object: InferenceObject):
-    data = np.array(
-        [
-            [
-                inference_object.feature_1,
-                inference_object.feature_2
-            ]
-        ]
-    )
+    data = np.array([[inference_object.feature_1, inference_object.feature_2]])
 
     prediction = model.predict(data)
-    prediction = "{:.5f}".format(prediction[0])
+    prediction = round(prediction[0], 5)
 
-    date =  datetime.now().date()
+    date = datetime.now().date()
     date_iso = date.isoformat()
 
     id = uuid.uuid4()
 
-    return {
-        "data": date_iso,
-        "predicao": prediction,
-        "id": id
-    }
-
-
-
+    return {"data": date_iso, "predicao": prediction, "id": id}
