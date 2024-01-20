@@ -10,18 +10,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Poetry
-      run: pip install poetry
-
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: 3.8.18
-        cache: 'poetry' 
 
     - name: Install dependencies
       run: |
-        poetry install
+        pip install python-dateutil
+        pip install fastapi
+        pip install pytest
+        pip install isort
+        pip install black
 
     - name: Check isort
       run: |
