@@ -1,9 +1,7 @@
-from unittest.mock import patch
-
 from dateutil.parser import isoparse
 from fastapi.testclient import TestClient
 
-from mlops.main import app, load_model
+from app.main import app, load_model
 
 
 class TestMainRoutes:
