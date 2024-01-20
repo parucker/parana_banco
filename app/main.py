@@ -1,12 +1,13 @@
 import logging
 import uuid
 from datetime import datetime
+from typing import List
 
 import joblib
 import numpy as np
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
-from pydantic import BaseModel
+from pydantic import BaseModel, conlist
 
 logging.basicConfig(
     filename="app.log",
@@ -21,8 +22,7 @@ app = FastAPI(title="Parana Banco Inferencia")
 
 
 class InferenceObject(BaseModel):
-    feature_1: float
-    feature_2: float
+    batches: List[conlist(item_type=float, min_length=2, max_length=2)]
 
 
 @app.on_event("startup")
@@ -36,7 +36,8 @@ def load_model():
 @app.post("/predict")
 def predict(inference_object: InferenceObject, response: Response) -> JSONResponse:
     try:
-        data = np.array([[inference_object.feature_1, inference_object.feature_2]])
+        batches = inference_object.batches
+        data = np.array(batches)
 
         logger.info(f"predict - starting prediction with {data}")
         prediction = model.predict(data)

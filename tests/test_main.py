@@ -10,10 +10,11 @@ class TestMainRoutes:
         load_model()
 
     def test_predict(cls):
-        inference_data = {"feature_1": 0.1, "feature_2": 2.5}
+        inference_data = {"batches": [[1.5 for i in range(2)]]}
 
         response = cls.client.post("/predict", json=inference_data)
         json_response = response.json()
+        print(json_response)
 
         assert response.status_code == 200
         assert isoparse(json_response["data"])
