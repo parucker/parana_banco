@@ -1,0 +1,32 @@
+name: Lint and Tests
+
+on: [push, pull_request]
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Poetry
+      run: pip install poetry
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8.18
+        cache: 'poetry' 
+
+    - name: Check isort
+      run: |
+        poetry run isort --check .
+       
+    - name: Check black
+      run: |
+        poetry run black --check .
+
+    - name: Run pytest
+      run: |
+        poetry run pytest
