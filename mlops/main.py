@@ -4,6 +4,7 @@ from datetime import datetime
 import joblib
 import numpy as np
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
 app = FastAPI(title="Parana Banco Inferencia")
@@ -21,15 +22,21 @@ def load_model():
 
 
 @app.post("/predict")
-def predict(inference_object: InferenceObject):
-    data = np.array([[inference_object.feature_1, inference_object.feature_2]])
+def predict(inference_object: InferenceObject, response: Response) -> JSONResponse:
+    try:
+        data = np.array([[inference_object.feature_1, inference_object.feature_2]])
 
-    prediction = model.predict(data)
-    prediction = round(prediction[0], 5)
+        prediction = model.predict(data)
+        prediction = round(prediction[0], 5)
 
-    date = datetime.now().date()
-    date_iso = date.isoformat()
+        date = datetime.now().date()
+        date_iso = date.isoformat()
 
-    id = uuid.uuid4()
+        id = str(uuid.uuid4())
 
-    return {"data": date_iso, "predicao": prediction, "id": id}
+        return JSONResponse(
+            content={"data": date_iso, "predicao": prediction, "id": id}
+        )
+    except Exception as e:
+        response.status_code = 500
+        return JSONResponse(content={"error_msg": str(e)})
