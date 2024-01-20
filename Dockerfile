@@ -3,11 +3,15 @@ FROM python:3.8.18
 COPY poetry.lock .
 COPY pyproject.toml . 
 
-RUN pip install poetry
-RUN poetry install 
+RUN pip install scikit-learn==1.0.1 \
+                fastapi \
+                uvicorn \
+                joblib \
+                datetime \
+                python-dateutil
 
 EXPOSE 80
 
-COPY ./mlops /mlops
+COPY ./app /app
 
-CMD ["poetry run uvicorn", "mlops.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
