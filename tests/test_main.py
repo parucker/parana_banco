@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from dateutil.parser import isoparse
 from fastapi.testclient import TestClient
 
