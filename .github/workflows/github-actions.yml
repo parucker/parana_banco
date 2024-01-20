@@ -24,6 +24,7 @@ jobs:
         pip install black
         pip install httpx
         pip install joblib
+        pip install scikit-learn==1.0.1
 
     - name: Check isort
       run: |
