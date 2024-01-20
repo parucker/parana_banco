@@ -16,7 +16,6 @@ class TestMainRoutes:
 
         response = cls.client.post("/predict", json=inference_data)
         json_response = response.json()
-        print(json_response)
 
         assert response.status_code == 200
         assert isoparse(json_response["data"])
