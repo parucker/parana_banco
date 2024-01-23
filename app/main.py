@@ -6,7 +6,9 @@ import joblib
 import numpy as np
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response
-from pydantic import BaseModel
+
+from app.inference.inference_features import InferenceFeatures
+from app.inference.predict import Predict
 
 logging.basicConfig(
     filename="app.log",
@@ -20,38 +22,36 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Parana Banco Inferencia")
 
 
-class InferenceObject(BaseModel):
-    feature_1: float
-    feature_2: float
-
-
 @app.on_event("startup")
 def load_model():
     logger.info("startup - loading model")
     global model
-    model = joblib.load("app/model/modelo.joblib")
+    model = joblib.load("app/artifacts/modelo.joblib")
     logger.info("startup - model loaded")
 
 
 @app.post("/predict")
-def predict(inference_object: InferenceObject, response: Response) -> JSONResponse:
+def predict(inference_object: InferenceFeatures, response: Response) -> JSONResponse:
     try:
+        id = str(uuid.uuid4())
         data = np.array([[inference_object.feature_1, inference_object.feature_2]])
 
         logger.info(f"predict - starting prediction with {data}")
-        prediction = model.predict(data)
-        prediction = round(prediction[0], 5)
-        logger.info(f"predict - prediction has ended with value {prediction}")
+        prediction = Predict.prediction(data, model)
+        logger.info(f"predict - prediction id:{id} has ended with value {prediction}")
 
         date = datetime.now().date()
         date_iso = date.isoformat()
-
-        id = str(uuid.uuid4())
 
         return JSONResponse(
             content={"data": date_iso, "predicao": prediction, "id": id}
         )
     except Exception as e:
-        response.status_code = 500
         logger.error(f"predict - error {str(e)}")
-        return JSONResponse(content={"error_msg": str(e)})
+        return JSONResponse(content={"error_msg": str(e)}, status_code=500)
+
+
+@app.get("/ping")
+def ping() -> JSONResponse:
+    message = "The server is running"
+    return JSONResponse(content={"message": message})
