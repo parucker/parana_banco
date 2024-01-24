@@ -6,6 +6,6 @@ class LoadTest(HttpUser):
     host = "http://localhost"
 
     @task
-    def predict_batch_1(self):
-        request_body = {"batches": [[1.5 for i in range(2)]]}
+    def predict_without_batch(self):
+        request_body = {"feature_1": 1.2, "feature_2": 2.3}
         self.client.post("http://batch-1:80/predict", json=request_body, name="batch-1")
