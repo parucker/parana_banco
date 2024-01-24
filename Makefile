@@ -9,7 +9,7 @@ run-docker:
 	docker run --rm -p 80:80 app:latest
 
 build-docker:
-	docker build -t app .
+	docker build --no-cache -t app .
 
 run-server-without-docker:
 	poetry run uvicorn app.main:app --reload

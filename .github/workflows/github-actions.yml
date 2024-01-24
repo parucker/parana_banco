@@ -13,27 +13,21 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: 3.8.18
+        python-version: 3.9.18
 
     - name: Install dependencies
       run: |
-        pip install python-dateutil
-        pip install fastapi
-        pip install pytest
-        pip install isort
-        pip install black
-        pip install httpx
-        pip install joblib
-        pip install scikit-learn==1.0.1
+        pip install poetry
+        poetry install
 
     - name: Check isort
       run: |
-        isort --check .
+        poetry run isort --check .
        
     - name: Check black
       run: |
-        black --check .
+        poetry run black --check .
 
     - name: Run pytest
       run: |
-        pytest
+        poetry run pytest

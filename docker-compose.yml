@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  predict_without_batch:
+    image: app:latest
+    links:
+      - locust
+  locust:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py
