@@ -3,7 +3,7 @@
 ## First Steps
 Make sure you have pyenv installed and then run the following commands:
 ```
-pyenv install 3.8.18
+pyenv install 3.9.18
 pyenv virtualenv 3.8.18 name_for_your_env
 pyenv activate name_for_your_env
 ```

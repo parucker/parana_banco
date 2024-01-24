@@ -1,17 +1,13 @@
-FROM python:3.8.18
+FROM python:3.9.18
 
 COPY poetry.lock .
 COPY pyproject.toml . 
 
-RUN pip install scikit-learn==1.0.1 \
-                fastapi \
-                uvicorn \
-                joblib \
-                datetime \
-                python-dateutil
+RUN pip install poetry
+RUN poetry install
 
 EXPOSE 80
 
 COPY ./app /app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
