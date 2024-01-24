@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  batch-1:
+  predict_without_batch:
     image: app:latest
     links:
       - locust
