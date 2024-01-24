@@ -11,7 +11,7 @@ class TestMainRoutes:
         cls.client = TestClient(app)
         load_model()
 
-    def test_predict_sucess(cls):
+    def test_predict_success(cls):
         inference_data = {"feature_1": 0.1, "feature_2": 2.5}
 
         response = cls.client.post("/predict", json=inference_data)

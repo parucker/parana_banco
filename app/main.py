@@ -37,7 +37,8 @@ def predict(inference_object: InferenceFeatures, response: Response) -> JSONResp
         data = np.array([[inference_object.feature_1, inference_object.feature_2]])
 
         logger.info(f"predict - starting prediction with {data}")
-        prediction = Predict.prediction(data, model)
+        predict = Predict(model=model)
+        prediction = predict.prediction(data)
         logger.info(f"predict - prediction id:{id} has ended with value {prediction}")
 
         date = datetime.now().date()

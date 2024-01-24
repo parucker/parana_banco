@@ -1,9 +1,12 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class Predict:
-    data: None
     model: None
 
-    def prediction(data, model):
-        prediction = model.predict(data)
+    def prediction(self, data):
+        prediction = self.model.predict(data)
         prediction = round(prediction[0], 5)
 
         return prediction
